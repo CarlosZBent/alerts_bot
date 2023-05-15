@@ -23,20 +23,18 @@ logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a message when the command /start is issued."""
-    user = update.effective_user
-    await update.message.reply_markdown(
-        f"Your id is **{CZ_USERID}**"
-    )
+    await update.message.reply_html(
+    f"""
+    <b>HELLO</b>
+    """)
 
 def main() -> None:
     """Start the bot."""
     # Create the Application and pass it your bot's token.
     application = Application.builder().token(BOT_TOKEN).build()
 
-    # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))
 
-    # Run the bot until the user presses Ctrl-C
     application.run_polling()
 
 
