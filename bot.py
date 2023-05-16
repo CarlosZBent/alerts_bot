@@ -11,8 +11,7 @@ from dotenv import load_dotenv
 from os import getenv
 from datetime import datetime
 
-from db_funcs import query_present_day_data
-from helpers import format_table_data_to_dict
+from standalone_funcs import fetch_data_from_table
 
 
 load_dotenv()
@@ -27,8 +26,8 @@ logger = logging.getLogger(__name__)
 CZ_USERID = getenv("CZ_USERID")
 BOT_TOKEN = getenv("BOT_TOKEN")
 EVENTS_TABLE = getenv("EVENTS_TABLE")
-
 today = datetime.now().date()
+
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a message when the command /start is issued."""
@@ -39,18 +38,19 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     Otherwise use /fetch_now to get the latest results right now
     """)
 
+
 async def fetch_now(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
     Fetch the current table data 
     when the user requests it
     """
-    data = query_present_day_data(EVENTS_TABLE, "2023-05-05")
-    data_dict = format_table_data_to_dict(data)
-    print(data_dict)
-    await update.message.reply_text(str(data_dict))
+    message_content = fetch_data_from_table(EVENTS_TABLE, "2023-05-05")
+    for i in message_content:
+        await update.message.reply_markdown(
+            f"""{ today }\n\n{ i }"""
+        )
 
     
-
 def main() -> None:
     """Start the bot."""
     # Create the Application and pass it your bot's token.
