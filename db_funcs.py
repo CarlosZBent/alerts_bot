@@ -1,17 +1,19 @@
 from supabase import create_client, Client
 from dotenv import load_dotenv
 from os import getenv
-from datetime import datetime
 
 load_dotenv()
 
-url: str = getenv("SUPABASE_URL")
-key: str = getenv("SUPABASE_KEY")
-supabase: Client = create_client(url, key)
+SUPABASE_URL: str = getenv("SUPABASE_URL")
+SUPABASE_KEY: str = getenv("SUPABASE_KEY")
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-today = datetime.now().date()
+def query_present_day_data(table, date) -> list:
+    """
+    Fetch the events data for today from the database
+    """
+    # select today's data from DB
+    data = supabase.table(table).select('*').eq("date", date).execute().data
+    return data
 
-# select today's data from DB
-data = supabase.table("TEST-TABLE1").select('*').eq("date", today).execute()
-
-daily_events = data.data
+# x = query_present_day_data("TEST-TABLE1", "2023-10-05")
