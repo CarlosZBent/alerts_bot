@@ -45,10 +45,9 @@ async def fetch_now(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     when the user requests it
     """
     message_content = fetch_data_from_table(EVENTS_TABLE, "2023-05-05")
-    for i in message_content:
-        await update.message.reply_markdown(
-            f"""{ today }\n\n{ i }"""
-        )
+    await update.message.reply_markdown(
+        f"""{ today }\n\n{ message_content }"""
+    )
 
     
 def main() -> None:

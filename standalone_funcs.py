@@ -16,6 +16,18 @@ def format_table_data_to_dict(original_list:list) -> dict:
     return data_dict
 
 
+def format_data_for_text_message(data_list:list) -> str:
+    """
+    Take the data from the list and turn it into a 
+    paragraph that can be sent as a message
+    """
+    message_text = ""
+    for elem in data_list:
+        message_text += f"""{elem}\n\n"""
+
+    return message_text
+
+
 def fetch_data_from_table(table, date) -> list:
     """
     fetch data from database table
@@ -27,6 +39,7 @@ def fetch_data_from_table(table, date) -> list:
     data_dict = format_table_data_to_dict(data)
 
     for k in data_dict:
-        data_content.append(f"""__{ k }__: { data_dict[k]["event_type"] } ({data_dict[k]["created_at"][11:19]})""")
+        # The (*) surrounding k are for markdown formatting when the message is sent
+        data_content.append(f"""*{ k }*: { data_dict[k]["event_type"] } ({data_dict[k]["created_at"][11:19]})""")
 
-    return data_content
+    return format_data_for_text_message(data_content)
