@@ -6,16 +6,14 @@ dev = [
 ]
 
 [project]
-name = ""
-version = ""
+name = "alerts_bot"
+version = "0.1" 
 description = ""
 authors = [
     {name = "liquidsnake", email = "bentsoft365@gmail.com"},
 ]
 dependencies = [
     "supabase>=1.0.3",
-    "schedule>=1.2.0",
-    "asyncio>=3.4.3",
     "python-telegram-bot==13.11",
 ]
 requires-python = ">=3.9"
