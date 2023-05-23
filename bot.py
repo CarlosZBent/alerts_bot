@@ -19,7 +19,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-USERID = getenv("CZ_USERID")
+USERID = getenv("USERID")
 BOT_TOKEN = getenv("BOT_TOKEN")
 EVENTS_TABLE = getenv("EVENTS_TABLE")
 today = datetime.now().date()
