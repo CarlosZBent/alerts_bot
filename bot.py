@@ -19,7 +19,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-CZ_USERID = getenv("CZ_USERID")
+USERID = getenv("CZ_USERID")
 BOT_TOKEN = getenv("BOT_TOKEN")
 EVENTS_TABLE = getenv("EVENTS_TABLE")
 today = datetime.now().date()
@@ -58,7 +58,6 @@ def main() -> None:
 
     def daily_alert(*args, **kwargs):
         ThisBot = Bot(BOT_TOKEN)
-        print(ThisBot)
         message_content = fetch_data_from_table(EVENTS_TABLE, yesterday)
         print(message_content)
         ThisBot.send_message(CZ_USERID, f"""Events for { yesterday }\n\n{ message_content }""", parse_mode="markdown")
@@ -67,7 +66,7 @@ def main() -> None:
     CustomJobQueue = JobQueue()
     CustomJobQueue.set_dispatcher(dispatcher=dispatcher)
     tz_info = tz.gettz("America/Havana")
-    trigger_time = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 11, 57, 00, 0o40153, tz_info).time()
+    trigger_time = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 9, 00, 00, 0, tz_info).time()
     print("TZ: ", tz_info)
     print("TRIGGER_TIME: ", trigger_time)
     CustomJobQueue.run_daily(daily_alert, trigger_time, name="daily_alert")
