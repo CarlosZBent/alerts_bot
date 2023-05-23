@@ -1,4 +1,4 @@
-from db_funcs import query_present_day_data
+from db_funcs import query_events_data
 
 
 def format_table_data_to_dict(original_list:list) -> dict:
@@ -34,12 +34,15 @@ def fetch_data_from_table(table, date) -> list:
     """
     data_content = list()
 
-    data = query_present_day_data(table, date)
+    data = query_events_data(table, date)
 
     data_dict = format_table_data_to_dict(data)
 
-    for k in data_dict:
-        # The (*) surrounding k are for markdown formatting when the message is sent
-        data_content.append(f"""*{ k }*: { data_dict[k]["event_type"] } ({data_dict[k]["created_at"][11:19]})""")
+    if len(data_dict) > 0:
+        for k in data_dict:
+            # The (*) surrounding k are for markdown formatting when the message is sent
+            data_content.append(f"""*{ k }*: { data_dict[k]["event_type"] } ({data_dict[k]["created_at"][11:19]})""")
+    else:
+        data_content.append("*No events data*")
 
     return format_data_for_text_message(data_content)

@@ -8,7 +8,7 @@ SUPABASE_URL: str = getenv("SUPABASE_URL")
 SUPABASE_KEY: str = getenv("SUPABASE_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-def query_present_day_data(table:str, date:str) -> list:
+def query_events_data(table:str, date:str) -> list:
     """
     Fetch the events data for today from the database
     """
