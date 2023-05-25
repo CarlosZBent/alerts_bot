@@ -64,7 +64,7 @@ def main() -> None:
         Send a daily alert message
         """
         ThisBot = Bot(BOT_TOKEN)
-        events_data = query_events_data(EVENTS_TABLE, today)
+        events_data = query_events_data(EVENTS_TABLE, yesterday)
         message_content = format_data_for_text_message(events_data)
         ThisBot.send_message(USERID, f"""Events for { yesterday }\n\n{ message_content }""", parse_mode="markdown")
 
