@@ -5,9 +5,10 @@ import logging
 from dotenv import load_dotenv
 from os import getenv
 from datetime import datetime, timedelta
-from dateutil import tz
+import pytz
 
-from standalone_funcs import fetch_data_from_table
+from db_funcs import query_events_data
+from helpers import format_data_for_text_message
 
 
 load_dotenv()
@@ -41,7 +42,9 @@ def fetch_now(update: Update, context: CallbackContext) -> None:
     Fetch the current table data 
     when the user requests it
     """
-    message_content = fetch_data_from_table(EVENTS_TABLE, today)
+    events_data = query_events_data(EVENTS_TABLE, today)
+    message_content = format_data_for_text_message(events_data)
+
     update.message.reply_markdown(
         f"""Events for { today }\n\n{ message_content }"""
     )
@@ -51,23 +54,26 @@ def main() -> None:
     """Start the bot."""
     
     updater = Updater(token=BOT_TOKEN, use_context=True)
-    dispatcher = updater.dispatcher
+    dp = updater.dispatcher
 
-    dispatcher.add_handler(CommandHandler("start", start))
-    dispatcher.add_handler(CommandHandler("fetch_now", fetch_now))
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("fetch_now", fetch_now))
 
     def daily_alert(*args, **kwargs):
+        """
+        Send a daily alert message
+        """
         ThisBot = Bot(BOT_TOKEN)
-        message_content = fetch_data_from_table(EVENTS_TABLE, yesterday)
-        print(message_content)
-        ThisBot.send_message(CZ_USERID, f"""Events for { yesterday }\n\n{ message_content }""", parse_mode="markdown")
+        events_data = query_events_data(EVENTS_TABLE, today)
+        message_content = format_data_for_text_message(events_data)
+        ThisBot.send_message(USERID, f"""Events for { yesterday }\n\n{ message_content }""", parse_mode="markdown")
 
 
     CustomJobQueue = JobQueue()
-    CustomJobQueue.set_dispatcher(dispatcher=dispatcher)
-    tz_info = tz.gettz("America/Havana")
-    trigger_time = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 9, 00, 00, 0, tz_info).time()
-    print("TZ: ", tz_info)
+    CustomJobQueue.set_dispatcher(dispatcher=dp)
+    timez = pytz.timezone("US/Eastern")
+    trigger_time = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 9, 00, 00, 0, timez).timetz()
+    print("TZ: ", timez)
     print("TRIGGER_TIME: ", trigger_time)
     CustomJobQueue.run_daily(daily_alert, trigger_time, name="daily_alert")
     CustomJobQueue.scheduler.start()
