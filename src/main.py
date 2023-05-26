@@ -42,7 +42,7 @@ def fetch_now(update: Update, context: CallbackContext) -> None:
     Fetch the current table data 
     when the user requests it
     """
-    if update.effective_user.id == USERID:
+    if update.effective_user.id == int(USERID):
         events_data = query_events_data(EVENTS_TABLE, today)
         message_content = format_data_for_text_message(events_data)
 
