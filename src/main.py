@@ -42,12 +42,15 @@ def fetch_now(update: Update, context: CallbackContext) -> None:
     Fetch the current table data 
     when the user requests it
     """
-    events_data = query_events_data(EVENTS_TABLE, today)
-    message_content = format_data_for_text_message(events_data)
+    if update.effective_user.id == USERID:
+        events_data = query_events_data(EVENTS_TABLE, today)
+        message_content = format_data_for_text_message(events_data)
 
-    update.message.reply_markdown(
-        f"""Events for { today }\n\n{ message_content }"""
-    )
+        update.message.reply_markdown(
+            f"""Events for { today }\n\n{ message_content }"""
+        )
+    else:
+        update.message.reply_text("You are not authorized to use this bot. To know more contact @cezbent. Thanks!")
 
 
 def main() -> None:
