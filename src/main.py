@@ -59,24 +59,24 @@ def main() -> None:
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("fetch_now", fetch_now))
 
-    # def daily_alert(*args, **kwargs):
-    #     """
-    #     Send a daily alert message
-    #     """
-    #     ThisBot = Bot(BOT_TOKEN)
-    #     events_data = query_events_data(EVENTS_TABLE, yesterday)
-    #     message_content = format_data_for_text_message(events_data)
-    #     ThisBot.send_message(USERID, f"""Events for { yesterday }\n\n{ message_content }""", parse_mode="markdown")
+    def daily_alert(*args, **kwargs):
+        """
+        Send a daily alert message
+        """
+        ThisBot = Bot(BOT_TOKEN)
+        events_data = query_events_data(EVENTS_TABLE, yesterday)
+        message_content = format_data_for_text_message(events_data)
+        ThisBot.send_message(USERID, f"""Events for { yesterday }\n\n{ message_content }""", parse_mode="markdown")
 
 
-    # CustomJobQueue = JobQueue()
-    # CustomJobQueue.set_dispatcher(dispatcher=dp)
-    # timez = pytz.timezone("US/Eastern")
-    # trigger_time = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 9, 00, 00, 0, timez).timetz()
-    # print("TZ: ", timez)
-    # print("TRIGGER_TIME: ", trigger_time)
-    # CustomJobQueue.run_daily(daily_alert, trigger_time, name="daily_alert")
-    # CustomJobQueue.scheduler.start()
+    CustomJobQueue = JobQueue()
+    CustomJobQueue.set_dispatcher(dispatcher=dp)
+    timez = pytz.timezone("US/Eastern")
+    trigger_time = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 9, 00, 00, 0, timez).timetz()
+    print("TZ: ", timez)
+    print("TRIGGER_TIME: ", trigger_time)
+    CustomJobQueue.run_daily(daily_alert, trigger_time, name="daily_alert")
+    CustomJobQueue.scheduler.start()
 
     updater.start_polling()
     updater.idle()
