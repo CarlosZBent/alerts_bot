@@ -7,8 +7,8 @@ from os import getenv
 from datetime import datetime, timedelta
 import pytz
 
-from db_funcs import query_events_data
-from helpers import format_data_for_text_message
+from db_funcs.db_funcs import query_events_data
+from helpers.helpers import format_data_for_text_message
 
 
 load_dotenv()
