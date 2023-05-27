@@ -23,7 +23,8 @@ logger = logging.getLogger(__name__)
 USERID = getenv("USERID")
 BOT_TOKEN = getenv("BOT_TOKEN")
 EVENTS_TABLE = getenv("EVENTS_TABLE")
-today = datetime.now().date()
+user_timezone = pytz.timezone("US/Eastern")
+today = datetime.now(tz=user_timezone).date()
 yesterday = today - timedelta(1)
 
 
@@ -50,7 +51,7 @@ def fetch_now(update: Update, context: CallbackContext) -> None:
             f"""Events for { today }\n\n{ message_content }"""
         )
     else:
-        update.message.reply_text("You are not authorized to use this bot. To know more contact @cezbent. Thanks!")
+        update.message.reply_text("You are not authorized to use this bot. To know more contact @cezbent. Thanks!")        
 
 
 def main() -> None:
@@ -74,9 +75,8 @@ def main() -> None:
 
     CustomJobQueue = JobQueue()
     CustomJobQueue.set_dispatcher(dispatcher=dp)
-    timez = pytz.timezone("US/Eastern")
-    trigger_time = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 9, 00, 00, 0, timez).timetz()
-    print("TZ: ", timez)
+    trigger_time = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 9, 00, 00, 0, user_timezone).timetz()
+    print("TZ: ", user_timezone)
     print("TRIGGER_TIME: ", trigger_time)
     CustomJobQueue.run_daily(daily_alert, trigger_time, name="daily_alert")
     CustomJobQueue.scheduler.start()
