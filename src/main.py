@@ -50,8 +50,15 @@ def fetch_now(update: Update, context: CallbackContext) -> None:
         update.message.reply_markdown(
             f"""Events for { today }\n\n{ message_content }"""
         )
+        print(f">>> Events data requested for {today}. Sent successfully.")
     else:
-        update.message.reply_text("You are not authorized to use this bot. To know more contact @cezbent. Thanks!")        
+        update.message.reply_text("You are not authorized to use this bot. To know more contact @cezbent. Thanks!")
+        context.bot.send_message(USERID, f"""
+    Unauthorized user attempted access:
+    - user_id: {update.effective_message.from_user.id}
+    - username: {update.effective_message.from_user.username}
+    - full_name: {update.effective_message.from_user.first_name}  {update.effective_message.from_user.last_name}
+    """)
 
 
 def main() -> None:
@@ -71,6 +78,7 @@ def main() -> None:
         events_data = query_events_data(EVENTS_TABLE, yesterday)
         message_content = format_data_for_text_message(events_data)
         ThisBot.send_message(USERID, f"""Events for { yesterday }\n\n{ message_content }""", parse_mode="markdown")
+        print(f">>> Daily alert sent successfully. Corresponding date={yesterday}")
 
 
     CustomJobQueue = JobQueue()
