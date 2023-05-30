@@ -83,7 +83,7 @@ def main() -> None:
 
     CustomJobQueue = JobQueue()
     CustomJobQueue.set_dispatcher(dispatcher=dp)
-    trigger_time = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 9, 00, 00, 0, user_timezone).timetz()
+    trigger_time = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 10, 00, 00, 0, user_timezone).timetz()
     print("TZ: ", user_timezone)
     print("TRIGGER_TIME: ", trigger_time)
     CustomJobQueue.run_daily(daily_alert, trigger_time, name="daily_alert")

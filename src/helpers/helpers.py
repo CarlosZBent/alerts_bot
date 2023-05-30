@@ -6,9 +6,8 @@ def format_data_for_text_message(data_list:list) -> str:
     message_text = str()
     if len(data_list) > 0:
         for elem in data_list:
-            # message_text += f"""{elem}\n\n"""
             message_text += f"""\n*{data_list.index(elem)+1}:* {elem["event_type"]} ({elem["created_at"][11:19]})\n"""
     else:
-        message_text = "*No events data*"
+        message_text = "*No data matched the specified parameters*"
 
     return message_text
