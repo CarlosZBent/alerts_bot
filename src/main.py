@@ -24,8 +24,6 @@ USERID = getenv("USERID")
 BOT_TOKEN = getenv("BOT_TOKEN")
 EVENTS_TABLE = getenv("EVENTS_TABLE")
 user_timezone = pytz.timezone("US/Eastern")
-today = datetime.now(tz=user_timezone).date()
-yesterday = today - timedelta(1)
 
 
 def start(update: Update, context: CallbackContext) -> None:
@@ -43,6 +41,7 @@ def fetch_now(update: Update, context: CallbackContext) -> None:
     Fetch the current table data 
     when the user requests it
     """
+    today = datetime.now(tz=user_timezone).date()
     if update.effective_user.id == int(USERID):
         events_data = query_events_data(EVENTS_TABLE, today)
         message_content = format_data_for_text_message(events_data)
@@ -74,6 +73,8 @@ def main() -> None:
         """
         Send a daily alert message
         """
+        today = datetime.now(tz=user_timezone).date()
+        yesterday = today - timedelta(1)
         ThisBot = Bot(BOT_TOKEN)
         events_data = query_events_data(EVENTS_TABLE, yesterday)
         message_content = format_data_for_text_message(events_data)
@@ -83,7 +84,7 @@ def main() -> None:
 
     CustomJobQueue = JobQueue()
     CustomJobQueue.set_dispatcher(dispatcher=dp)
-    trigger_time = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 10, 00, 00, 0, user_timezone).timetz()
+    trigger_time = datetime(datetime.now().year, datetime.now().month, datetime.now().day, 10, 00, 00, 0, user_timezone)
     print("TZ: ", user_timezone)
     print("TRIGGER_TIME: ", trigger_time)
     CustomJobQueue.run_daily(daily_alert, trigger_time, name="daily_alert")
